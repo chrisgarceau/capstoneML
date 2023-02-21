@@ -59,14 +59,14 @@ X_test, y_test = create_dataset(test, test[:, -1], time_steps)
 # BUILD & TRAIN THE LSTM MODEL
 # ----------------------------
 model = Sequential()
-# LSTM model with 100 neurons
-model.add(LSTM(100, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[2])))
+# LSTM model with 50 neurons
+model.add(LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], X_train.shape[2])))
 # Dropout is a regularization technique that helps prevent overfitting.
 #   - randomly drops neurons in the layer during each iteration
 #   - forces remaining neurons to learn more general features useful for prediciton rather than memorization
 #   - prevents co-adaptation of neurons
 model.add(Dropout(0.2))
-model.add(LSTM(100, return_sequences=False))
+model.add(LSTM(50, return_sequences=False))
 # Dense(1) refers to layer which connects every input with a single output neuron
 #   - performs a linear transformation of the input data
 #   - defines the dimensionality of the output space (linear function mapping input to output)
