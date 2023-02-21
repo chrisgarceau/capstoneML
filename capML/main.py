@@ -5,7 +5,6 @@ from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 
 # Read the CSV file
 df = pd.read_csv('mock.csv')
@@ -122,7 +121,6 @@ plt.legend(loc='upper right')
 plt.show()
 plt.close()
 
-
 # 3. REAL + PREDICTED
 plt.plot(df.iloc[:(int(len(df) * 0.8)), -1], label='Actual')
 plt.plot(df.index[-len(y_test):], y_pred_inv, label='Predicted')
@@ -130,7 +128,6 @@ plt.legend(loc='upper right')
 plt.xlabel('Datetime')
 plt.ylabel('Total Cars')
 plt.show()
-
 
 # PRINTING/STORING REAL & PREDICTED VALUES
 # -------------------------------
