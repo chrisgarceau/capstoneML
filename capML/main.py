@@ -31,6 +31,7 @@ df = df.astype('float32')
 #   - Test set consists of 20% of the dataset
 train, test = train_test_split(df, test_size=0.20, shuffle=False)
 
+
 # NORMALIZE THE TRAINING AND TEST SETS
 # ------------------------------------
 # Normalization:
