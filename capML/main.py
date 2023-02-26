@@ -4,33 +4,35 @@ from sklearn.model_selection import train_test_split
 from sklearn.preprocessing import MinMaxScaler
 from keras.models import Sequential
 from keras.layers import LSTM, Dense, Dropout
+from keras.callbacks import EarlyStopping
 import matplotlib.pyplot as plt
 
+
+# DATA PREPROCESSING
+# ------------------
 # Read the CSV file
 df = pd.read_csv('mock.csv')
-
 # Drop the 'car_enter' and 'car_exit' columns
 df = df.drop(['car_enter', 'car_exit'], axis=1)
-
 # Combine the 'date' and 'time' columns into a single column
 df['datetime'] = pd.to_datetime(df['date'] + ' ' + df['time'])
-
 # Drop the 'date' and 'time' columns
 df = df.drop(['date', 'time'], axis=1)
 df = df.set_index('datetime')
-
 # Converting total_cars to a numeric data type
 df['total_cars'] = pd.to_numeric(df['total_cars'])
-
 # Make all data type float
 df = df.astype('float32')
 
+
 # SPLIT THE DATA INTO TRAINING AND TESTING SETS
+# ---------------------------------------------
 #   - Training set consists of 80% of the dataset
 #   - Test set consists of 20% of the dataset
-train, test = train_test_split(df, test_size=0.2, shuffle=False)
+train, test = train_test_split(df, test_size=0.20, shuffle=False)
 
 # NORMALIZE THE TRAINING AND TEST SETS
+# ------------------------------------
 # Normalization:
 #   - prevents the dominance of some features
 #   - allows for faster convergence
@@ -42,8 +44,9 @@ scaler = MinMaxScaler()
 train = scaler.fit_transform(train)
 test = scaler.transform(test)
 
+
 # PREPARE DATA FOR LSTM
-# -------------------------
+# ---------------------
 def create_dataset(X, y, time_steps=1):
     Xs, ys = [], []
     for i in range(len(X) - time_steps):
@@ -55,6 +58,7 @@ def create_dataset(X, y, time_steps=1):
 time_steps = 1
 X_train, y_train = create_dataset(train, train[:, -1], time_steps)
 X_test, y_test = create_dataset(test, test[:, -1], time_steps)
+
 
 # BUILD & TRAIN THE LSTM MODEL
 # ----------------------------
@@ -72,11 +76,20 @@ model.add(LSTM(50, return_sequences=False))
 #   - defines the dimensionality of the output space (linear function mapping input to output)
 #   - outputs single scalar value which is great for predicting a continous value
 model.add(Dense(1))
+# Early stopping helps prevent overfitting by stopping training once loss and validation loss
+# do not improve for a specified number epochs
+#  - 'val_loss' is the metric to monitor
+#  - 'patience' is the number of epochs to wait for improvement
+#  - 'verbose' controls how much information to display
+#  - 'mode' controls whether to look for an improvement in the 'min' or 'max' direction
+early_stop = EarlyStopping(monitor='val_loss', patience=10, verbose=1, mode='min')
+
 
 # COMPILE & FIT THE MODEL
 # -----------------------
 model.compile(loss='mean_squared_error', optimizer='adam')
-model.fit(X_train, y_train, epochs=50, batch_size=16, validation_split=0.1, verbose=1)
+model.fit(X_train, y_train, epochs=100, batch_size=32, validation_split=0.1, verbose=1, callbacks=[early_stop])
+
 
 # EVALUATE THE MODEL
 # ------------------
@@ -85,17 +98,17 @@ test_score = model.evaluate(X_test, y_test, verbose=0)
 print('Train MSE: ', train_score)
 print('Test MSE: ', test_score)
 
+
 # USE THE MODEL TO MAKE PREDICTIONS
 # ---------------------------------
 predictions = model.predict(X_test)
-
 # Invert the scaling of the predictions and actual values
 y_pred_inv = scaler.inverse_transform(predictions)
 y_test_inv = scaler.inverse_transform(y_test.reshape(-1, 1))
 
 
 # GRAPHS:
-# ------------------------------------------------------
+# -------
 # Inverse transform the normalized data to get the real values
 y_test = scaler.inverse_transform(y_test.reshape(-1, 1))
 predictions = scaler.inverse_transform(predictions)
@@ -129,8 +142,9 @@ plt.xlabel('Datetime')
 plt.ylabel('Total Cars')
 plt.show()
 
+
 # PRINTING/STORING REAL & PREDICTED VALUES
-# -------------------------------
+# ----------------------------------------
 results = pd.DataFrame({'actual': y_test.reshape(-1), 'predicted': predictions.reshape(-1)})
 # Add a datetime column to the results dataframe
 dates = df.index[-len(y_test):]
