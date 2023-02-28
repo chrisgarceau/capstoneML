@@ -73,7 +73,7 @@ model.add(LSTM(50, return_sequences=True, input_shape=(X_train.shape[1], X_train
 #   - prevents co-adaptation of neurons
 model.add(Dropout(0.2))
 model.add(LSTM(50, return_sequences=False))
-# Dense(1) refers to layer which connects every input with a single output neuron
+# Dense(1) refers to a layer which connects every input with a single output neuron
 #   - performs a linear transformation of the input data
 #   - defines the dimensionality of the output space (linear function mapping input to output)
 #   - outputs single scalar value which is great for predicting a continous value
