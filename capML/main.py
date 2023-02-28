@@ -41,7 +41,8 @@ train, test = train_test_split(df, test_size=0.20, shuffle=False)
 #   - helps with regularization -> technique used to prevent overfitting
 #       - overfitting is when models are trained too well on training data
 #         resulting in poor performance when applied to new/unseen data.
-scaler = MinMaxScaler()
+
+scaler = MinMaxScaler() # Transforms features by scaling each feature to a given range.
 train = scaler.fit_transform(train)
 test = scaler.transform(test)
 
