@@ -133,32 +133,32 @@ predictions = scaler.inverse_transform(predictions)
 
 # # 1. REAL + PREDICTED: TEST DATA (last 20 % of the dataset)
 # # Plot the actual values and the predicted values
-# plt.plot(current_dow.index.values[-len(y_test):], y_test, label='Actual')
-# plt.plot(current_dow.index.values[-len(predictions):], predictions, label='Predicted')
-# plt.legend(loc='upper right')
-# plt.xlabel('Datetime')
-# plt.ylabel('Total Cars')
-# plt.legend()
-# plt.show()
-# plt.close()
+plt.plot(current_dow.index.values[-len(y_test):], y_test, label='Actual')
+plt.plot(current_dow.index.values[-len(predictions):], predictions, label='Predicted')
+plt.legend(loc='upper right')
+plt.xlabel('Datetime')
+plt.ylabel('Total Cars')
+plt.legend()
+plt.show()
+plt.close()
 
 # # 2. REAL + PREDICTED (overlay)
 # # Plot the predicted and actual values
-# plt.plot(current_dow.index, current_dow['total_cars'], label='Actual')
-# plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
-# plt.xlabel('Datetime')
-# plt.ylabel('Total Cars')
-# plt.legend(loc='upper right')
-# plt.show()
-# plt.close()
+plt.plot(current_dow.index, current_dow['total_cars'], label='Actual')
+plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
+plt.xlabel('Datetime')
+plt.ylabel('Total Cars')
+plt.legend(loc='upper right')
+plt.show()
+plt.close()
 
 # # 3. REAL + PREDICTED
-# plt.plot(current_dow.iloc[:(int(len(current_dow) * 0.8)), -1], label='Actual')
-# plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
-# plt.legend(loc='upper right')
-# plt.xlabel('Datetime')
-# plt.ylabel('Total Cars')
-# plt.show()
+plt.plot(current_dow.iloc[:(int(len(current_dow) * 0.8)), -1], label='Actual')
+plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
+plt.legend(loc='upper right')
+plt.xlabel('Datetime')
+plt.ylabel('Total Cars')
+plt.show()
 
 
 # PRINTING/STORING REAL & PREDICTED VALUES
@@ -176,6 +176,7 @@ results = results.drop(['datetime'], axis=1)
 # This is necessary for plotting data points in the frontend/mobile application
 results_resampled = results.resample('31T').mean()
 results_resampled = results_resampled.reset_index()
+
 # Print resampled dataframe
 # print(results_resampled)
 # Print the dataframe
