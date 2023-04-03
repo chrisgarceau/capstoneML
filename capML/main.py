@@ -191,5 +191,5 @@ gc = pygsheets.authorize(service_file='/Users/christopher_garceau/crested-centur
 sh = gc.open('Google Spread Sheet API')
 # select the third sheet 
 wks = sh[2]
-# update the third sheet with df, starting at cell A1. 
+# update the third sheet with results_resampled data frame, starting at cell A1. 
 wks.set_dataframe(results_resampled,(0,0))
