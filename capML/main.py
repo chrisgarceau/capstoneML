@@ -95,7 +95,7 @@ model.add(LSTM(50, return_sequences=False))
 #   - outputs single scalar value which is great for predicting a continous value
 model.add(Dense(1))
 # Early stopping helps prevent overfitting by stopping training once loss and validation loss
-# do not improve for a specified number epochs
+# do not improve for a specified number of epochs
 #  - 'val_loss' is the metric to monitor
 #  - 'patience' is the number of epochs to wait for improvement
 #  - 'verbose' controls how much information to display
