@@ -174,7 +174,7 @@ results = results.drop(['datetime'], axis=1)
 
 # Resample the dataframe at 30-minute intervals and calculate the mean of the total number of cars
 # This is necessary for plotting data points in the frontend/mobile application
-results_resampled = results.resample('31T').mean()
+results_resampled = results.resample('30T').mean()
 results_resampled = results_resampled.reset_index()
 
 # Print resampled dataframe
