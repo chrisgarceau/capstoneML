@@ -41,6 +41,7 @@ grouped = df.groupby(df.weekday)
 current_dow = grouped.get_group(currWeekday)
 current_dow = current_dow.drop(['weekday'], axis=1)
 
+
 # SPLIT THE DATA INTO TRAINING AND TESTING SETS
 # ---------------------------------------------
 #   - Training set consists of 80% of the dataset
@@ -57,7 +58,6 @@ train, test = train_test_split(current_dow, test_size=0.20, shuffle=False)
 #   - helps with regularization -> technique used to prevent overfitting
 #       - overfitting is when models are trained too well on training data
 #         resulting in poor performance when applied to new/unseen data.
-
 scaler = MinMaxScaler() # Transforms features by scaling each feature to a given range.
 train = scaler.fit_transform(train)
 test = scaler.transform(test)
