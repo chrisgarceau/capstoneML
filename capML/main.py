@@ -95,7 +95,7 @@ model.add(LSTM(50, return_sequences=False))
 #   - outputs single scalar value which is great for predicting a continous value
 model.add(Dense(1))
 # Early stopping helps prevent overfitting by stopping training once loss and validation loss
-# do not improve for a specified number of epochs
+# do not improve for a specified number epochs
 #  - 'val_loss' is the metric to monitor
 #  - 'patience' is the number of epochs to wait for improvement
 #  - 'verbose' controls how much information to display
@@ -125,14 +125,14 @@ y_pred_inv = scaler.inverse_transform(predictions)
 y_test_inv = scaler.inverse_transform(y_test.reshape(-1, 1))
 
 
-# GRAPHS:
-# -------
+# GRAPHS/DATA VISUALIZATION
+# -------------------------
 # Inverse transform the normalized data to get the real values
 y_test = scaler.inverse_transform(y_test.reshape(-1, 1))
 predictions = scaler.inverse_transform(predictions)
 
-# # 1. REAL + PREDICTED: TEST DATA (last 20 % of the dataset)
-# # Plot the actual values and the predicted values
+# 1. REAL + PREDICTED: TEST DATA (last 20 % of the dataset)
+# Plot the actual values and the predicted values
 plt.plot(current_dow.index.values[-len(y_test):], y_test, label='Actual')
 plt.plot(current_dow.index.values[-len(predictions):], predictions, label='Predicted')
 plt.legend(loc='upper right')
@@ -142,8 +142,8 @@ plt.legend()
 plt.show()
 plt.close()
 
-# # 2. REAL + PREDICTED (overlay)
-# # Plot the predicted and actual values
+# 2. REAL + PREDICTED (overlay)
+# Plot the predicted and actual values
 plt.plot(current_dow.index, current_dow['total_cars'], label='Actual')
 plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
 plt.xlabel('Datetime')
@@ -152,7 +152,7 @@ plt.legend(loc='upper right')
 plt.show()
 plt.close()
 
-# # 3. REAL + PREDICTED
+# 3. REAL + PREDICTED
 plt.plot(current_dow.iloc[:(int(len(current_dow) * 0.8)), -1], label='Actual')
 plt.plot(current_dow.index[-len(y_test):], y_pred_inv, label='Predicted')
 plt.legend(loc='upper right')
@@ -172,15 +172,18 @@ results = results.set_index(results['datetime'])
 results = results.drop(['datetime'], axis=1)
 
 
-# Resample the dataframe at 30-minute intervals and calculate the mean of the total number of cars
-# This is necessary for plotting data points in the frontend/mobile application
+# Resample the dataframe at 30-minute intervals. 
+# & calculate the mean of the predicted total number of cars within that time interval using all data from current day of week
+# This is necessary for plotting data points in the frontend/mobile application.
 results_resampled = results.resample('30T').mean()
 results_resampled = results_resampled.reset_index()
 
+
+# Print the original dataframe
+print(results)
 # Print resampled dataframe
-# print(results_resampled)
-# Print the dataframe
-# print(results)
+print(results_resampled)
+
 
 # Store values in .CSV file
 results_resampled.to_csv('results.csv', index=True)
@@ -191,5 +194,5 @@ gc = pygsheets.authorize(service_file='/Users/christopher_garceau/crested-centur
 sh = gc.open('Google Spread Sheet API')
 # select the third sheet 
 wks = sh[2]
-# update the third sheet with results_resampled data frame, starting at cell A1. 
+# update the third sheet with df, starting at cell A1. 
 wks.set_dataframe(results_resampled,(0,0))
