@@ -170,6 +170,7 @@ results = pd.DataFrame(data=results, columns=['actual', 'predicted'])
 results['datetime'] = dates
 results = results.set_index(results['datetime'])
 results = results.drop(['datetime'], axis=1)
+results = results.interpolate(method='linear')
 
 
 # Resample the dataframe at 30-minute intervals. 
